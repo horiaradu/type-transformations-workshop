@@ -1,16 +1,18 @@
-import { Equal, Expect } from "../helpers/type-utils";
+import { Equal, Expect } from '../helpers/type-utils';
 
 const parser1 = {
   parse: () => 1,
 };
 
-const parser2 = () => "123";
+const parser2 = () => '123';
 
 const parser3 = {
   extract: () => true,
 };
 
-type GetParserResult<T> = unknown;
+type Praser<T> = { parse: () => T } | (() => T) | { extract: () => T };
+
+type GetParserResult<T> = T extends Praser<infer U> ? U : never;
 
 type tests = [
   Expect<Equal<GetParserResult<typeof parser1>, number>>,
